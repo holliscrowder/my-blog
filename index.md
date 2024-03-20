@@ -2,9 +2,9 @@
 title: Welcome to my blog
 ---
 
-Phase 1 blog post:
+## Phase 1 blog post:
 
-There and Back Again: The Prologue
+### _There and Back Again: The Prologue_
 
 I started a software engineering bootcamp through Flatiron School a week ago. So far, learning how to be a software engineer has been like trying to drink from a fire hose. The more I learn, the more I discover just how much there is to learn. I feel like Bilbo Baggins leaving the Shire: my blissful existence as a user is over, and my journey to the Lonely Mountain has begun. But before I walk through the front gate, let’s do some light recon:
 
