@@ -327,7 +327,7 @@ Just as Bilbo spotted a vulnerability in Smaug's armour, we have successfully co
 
 ## Intro to Flask:
 
-### _The Arkenstone_
+### _Defeating Smaug_
 
 Smaug has awoken, enraged that Bilbo has learned his secrets, and flies off to Lake Town to destroy those he suspects have helped his enemies. Just as Bilbo knows about the vulnerability in Smaug's armour, we know how to break down complex systems into their constituent parts. We can now use that knowledge to defeat Smaug with the help of our friends. We just need a way to get that information to the people of Lake Town!
 
