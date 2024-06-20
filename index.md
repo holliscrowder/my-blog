@@ -337,7 +337,7 @@ In general, when working with a server, our goal is basically always the same: 1
 
 We can use Flask extensions like **Flask-SQLAlchemy** to get access to the SQLAlchemy library and ORM for python, **Flask-Migrate** to handle database migrations, and **jsonify** to structure the data being passed back and forth. Using these extensions, we can create our own web APIs with routes receive requests from the client side, access and manage data in our database, and send a response back to the client side in JSON format. 
 
-Let's say we want to layer a frontend application on top of our coffee shop model from th previous blog post. Maybe we want to be able to display a menu of all the coffees, have a form where new orders cna be created, or show the waiting list for who's in line that dynamically updates when a new order is placed. To do this, we need to build the interface between the coffee, order, and customer information stored in our database and the front end displaying that information. 
+Let's say we want to layer a frontend application on top of our coffee shop model from the previous blog post. Maybe we want to be able to display a menu of all the coffees, have a form where new orders can be created, or show the waiting list for who's in line that dynamically updates when a new order is placed. To do this, we need to build the interface between the coffee, order, and customer information stored in our database and the front end displaying that information. 
 
 We can use **Flask-RESTful** to build a restful API populated with resources that inherit from the **Resource** class, which includes conditions for throwing exceptions and base methods for each HTTP verb instance method (e.g. 'get', 'post', etc.). We might construct an API resource that accommodates a get request related to our coffee menu on the front end like this:
 
@@ -418,14 +418,116 @@ Maybe we also want to be able to update information from the frontend (maybe a c
                 except ValueError:
                     return {"error": "Value Error in order data"}, 400
 
-Neat! We have established a method for communicating knowledge back-and-forth between our frontend and backend, just like the thrush who overhears Bilbo's discovery about the weakspot in Smaug's armour and flies to Lake Town to tell Bard. Smaug, enraged by Bilbo's intrusion, flies to Lake Town to destroy those he believes have helped his enemies. Learning of the weakness in Smaug's armour from the thrush, Bard of Lake Town is able to shoot Smaug down!
+Neat! We have established a method for communicating knowledge back-and-forth between our frontend and backend, just like the thrush who overhears Bilbo's discovery about the weakspot in Smaug's armour and flies to Lake Town to tell Bard. 
 
-But wait, defeating Smaug was not as simple as it seems. The people of Lake Town are requesting compensation from Bilbo and the dwarves for awakening and enraging Smaug. But the dwarves are not so keen to relinquish their long-lost treasure, and tensions begin to flare. Just then, Gandlaf returns and warns that an army of Goblins and Wargs is on the way - they have their own designs for the treasure!
+Smaug, enraged by Bilbo's intrusion, flies to Lake Town to destroy those he believes have helped his enemies. Learning of the weakness in Smaug's armour from the thrush, Bard of Lake Town is able to shoot Smaug down!
 
-We now have a full arsenal at our disposal to create solutions to complex problems Can we bring everything we've learned together to avert all-out war between men, dwarves, elves, and goblins?                  
-            
-            
-                    
+But wait, defeating Smaug was not as simple as it seems. The people of Lake Town are requesting compensation from Bilbo and the dwarves for awakening and enraging Smaug. But the dwarves are not so keen to relinquish their long-lost treasure, and tensions begin to flare. Just then, Gandlaf returns and warns that an army of goblins and wargs is on the way - they have their own designs for the treasure!
+
+We now have a full arsenal at our disposal to create solutions to complex problems Can we bring everything we've learned together to avert all-out war between men, dwarves, elves, goblins, and wargs?          
+
+---
+
+---
+
+## Building a Full-Stack Application:
+
+### _Battle of the Five Armies_
+
+We have reached the climax of our adventure - the Battle of the Five Armies! We will need to make use of every tool and skill we have to successfully defeat the goblin and warg armies. Up to this point, we have discussed different methods and techniques for creating and passing information back-and-forth between the frontend and backend of a basic web application. To win the final battle, we still have one more layer we need to incorporate.
+
+Passing information between the frontend and backend is important, but ultimately, it's all in service of the greater mission of making a _useful_ web application. A common feature of useful web applications is data visualization. Data visualizations can take many forms: Lists of text, links, or images, graphical depictions, etc. Due to the paired-down and flexible nature of Flask, there are thousands of different extensions we can use in our full-stack application to help us visualize data.
+
+One such extension is **Recharts**, which supports the creation of data visualization components like line charts. Let's say we wanted a way to "see" how busy our coffee shop is over the course of time. We might have a list of JSON objects organizing our coffee shop data in the following manner:
+
+        coffeeData = {
+            {
+                "date": "2024-06-20",
+                "customers": "57",
+                "orders": "60",
+                "coffees" : {
+                    "drip": "10",
+                    "latte": "24",
+                    "mocha": "13",
+                    "cappuccino": "11",
+                    "coldBrew": "6"
+                }
+            },
+            {
+                "date": "2024-06-21",
+                "customers": "62",
+                "orders": "63",
+                "coffees" : {
+                    "drip": "7",
+                    "latte": "28",
+                    "mocha": "12",
+                    "cappuccino": "15",
+                    "coldBrew": "8"
+                }
+            },
+            ...
+        }
+
+Maybe we are interested in visualizing how many customers we've had each day. We can import the Recharts library into our React frontend and (assuming we have the coffeeData JSON object on hand from a "get" request somewhere in a parent component) organize our customer counts into a graph like so:
+
+        import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from "recharts";
+
+        export default function Chart( {coffeeData} ) {
+            return (
+                    // wrap our chart in a reponsive contianer that will resize our chart automatically
+                    <ResponsiveContainer width = "100%" aspect={3}>
+                        // create our line chart
+                        <LineChart
+                        className = "chart"
+                        label={"Chart"}
+                        width={500}
+                        height={400}
+                        data={coffeeData}
+                        margin={{
+                            top: 5,
+                            right: 10,
+                            left: 10,
+                            bottom: 5,
+                        }}
+                        >
+                            // add gride lines to our chart
+                            <CartesianGrid />
+                            // designate our X-axis as "time"
+                            <XAxis dataKey="date" tickFormatter={(timestamp) => new  Date(timestamp).toLocaleDateString()} domain = {['auto', 'auto']} name = "Time" className = "x-axis">
+                            </XAxis>
+                            // designate our Y-axis as the number of customers each day
+                            <YAxis domain = {[0, 4]}>
+                                <Label 
+                                    style={{
+                                        textAnchor: "middle",
+                                        fontSize: "130%",
+                                        fill: "black",
+                                        }}
+                                    angle={270} 
+                                    value={"score"} 
+                                />
+                            </YAxis>
+                            // add a hover tool tip to display information about data points when hovering
+                            <Tooltip />
+                            // add a legend
+                            <Legend />
+                            // add chart data
+                            <Line name = "customers" type="monotone" dataKey={customers} stroke="#dc3895" activeDot={{ r: 8 }}>Customers
+                            </Line>
+                        </LineChart>
+                    </ResponsiveContainer>
+            )
+        }
+
+Additionally, maybe we're interested in seeing how many orders we've had each day at the same time as seeing how many customers we've had each day. We can add another line of chart data with a different stroke color to differentiate it from our "customers" chart data like so:
+
+        <Line name = "orders" type="monotone" dataKey={orders} stroke="#fe6895" activeDot={{ r: 8 }}>Orders</Line>
+
+Just as the arrival of the eagles and Beorn pushes the elven-dwarvish-human army to victory over the goblins and dwarves, data visualization tools can take our app to the next level. Now we can see how things are changing (or not) over time, and we can start tailoring our shop or menu based on which days are most busy and which coffees are most popular. These sorts of interactive tools take our coffee shop from a record-keeping endeavor to an _insights_ driven endeavor. That change in mindset is important when you're operating in an industry with razor-thin margins! (Or, it's just cooler than a record-keeping app, if you're a data nerd like me.)
+
+And that brings us to the end of our Journey. Bilbo accepts a small part of the treasure for his role as Burglar, and he returns to the Shire roughly a year after having left a very rich man. We have gained so many new skills over the past 16 weeks - now it's time to go out and use our skills for good in the real world!
+
+
             
 
             
